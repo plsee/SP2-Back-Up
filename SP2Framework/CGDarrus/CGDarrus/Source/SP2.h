@@ -103,6 +103,7 @@ private:
 
 	pathFinding spaceCraft;
 
+	float wayPointSetCoolDown;
 
 };
 

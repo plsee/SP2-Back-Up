@@ -9,7 +9,9 @@
 #include "LoadTGA.h"
 
 SP2::SP2():
-spaceCraft(Vector3(0, 0, 0), Vector3(1, 1, 1))
+spaceCraft(Vector3(0, 0, 0), 
+Vector3(1, 1, 1)),
+wayPointSetCoolDown(0)
 {
 }
 
@@ -134,7 +136,7 @@ void SP2::Init()
 
 
 	//Path Checks
-	spaceCraft.setInitialWayPoints(Vector3(10, 0, 10));
+	spaceCraft.setInitialWayPoints(Vector3(100, 0, 100));
 
 
 
@@ -186,6 +188,14 @@ void SP2::Update(double dt)
 
 	//Path finding test
 	spaceCraft.pathRoute(dt);
+
+	wayPointSetCoolDown += dt;
+	if (Application::IsKeyPressed('G') && wayPointSetCoolDown > 3){
+
+		spaceCraft.updateWayPoints(camera.position);
+		wayPointSetCoolDown = 0;
+
+	}
 
 }
 
