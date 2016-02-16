@@ -31,7 +31,7 @@
 
 /////////////////////////////////////////////////////////////////
 pathFinding::pathFinding() :
-initialLocation(Vector3(0, 0, 0)),
+currentLocation(Vector3(0, 0, 0)),
 lastWayPointDirection(Vector3(0, 0, 0))
 {
 
@@ -57,7 +57,7 @@ lastWayPointDirection(Vector3(0, 0, 0))
 
 /////////////////////////////////////////////////////////////////
 pathFinding::pathFinding(Vector3 location, Vector3 endlocation) :
-initialLocation(location)
+currentLocation(location)
 {
 	wayPoints.push(endlocation);
 
@@ -107,12 +107,12 @@ void pathFinding::pathRoute(double dt){
 
 	if (!wayPoints.empty()){
 
-		Vector3 view = (wayPoints.front() - initialLocation).Normalized();
-		initialLocation += view * 10 * dt;
+		Vector3 view = (wayPoints.front() - currentLocation).Normalized();
+		currentLocation += view * 10 * dt;
 		lastWayPointDirection = view;
 
 	}
-	if (!wayPoints.empty() && distanceBetween2points(initialLocation, wayPoints.front()) < 1){
+	if (!wayPoints.empty() && distanceBetween2points(currentLocation, wayPoints.front()) < 1){
 
 		wayPoints.pop();
 		std::cout << wayPoints.size() << std::endl;
@@ -120,7 +120,7 @@ void pathFinding::pathRoute(double dt){
 	}
 	if (wayPoints.empty()){
 
-		initialLocation += lastWayPointDirection * 10 * dt;
+		currentLocation += lastWayPointDirection * 10 * dt;
 
 
 	}
@@ -171,8 +171,8 @@ float pathFinding::distanceBetween2points(Vector3 Point1, Vector3 Point2){
 /////////////////////////////////////////////////////////////////
 void pathFinding::setInitialWayPoints(Vector3 endLocation){
 
-	Vector3 view = (endLocation - initialLocation).Normalized();
-	Vector3 wayPointPosition = initialLocation;
+	Vector3 view = (endLocation - currentLocation).Normalized();
+	Vector3 wayPointPosition = currentLocation;
 
 	float length = distanceBetween2points(endLocation, wayPointPosition);
 	length /= 10;
@@ -206,8 +206,8 @@ void pathFinding::setInitialWayPoints(Vector3 endLocation){
 /////////////////////////////////////////////////////////////////
 void pathFinding::updateWayPoints(Vector3 endLocation){
 
-	Vector3 view = (endLocation - initialLocation).Normalized();
-	Vector3 wayPointPosition = initialLocation;
+	Vector3 view = (endLocation - currentLocation).Normalized();
+	Vector3 wayPointPosition = currentLocation;
 
 	float length = distanceBetween2points(endLocation, wayPointPosition);
 	length /= 10;
@@ -233,7 +233,7 @@ void pathFinding::updateWayPoints(Vector3 endLocation){
 
 * \author: Wong Keng Han Ashley
 
-* \date: 15 feb 2016
+* \date: 16 feb 2016
 
 * \description: setting initial waypoints for the object
 
@@ -247,5 +247,52 @@ void pathFinding::resetWayPoints(){
 		wayPoints.pop();
 
 	}
+
+}
+
+/////////////////////////////////////////////////////////////////
+
+/*!
+
+* \method: getCurrentLocation
+
+* \author: Wong Keng Han Ashley
+
+* \date: 16 feb 2016
+
+* \description: setting initial waypoints for the object
+
+*/
+
+/////////////////////////////////////////////////////////////////
+Vector3 pathFinding::getCurrentLocation(){
+
+
+	return currentLocation;
+
+
+}
+
+
+/////////////////////////////////////////////////////////////////
+
+/*!
+
+* \method: getwayPoints
+
+* \author: Wong Keng Han Ashley
+
+* \date: 16 feb 2016
+
+* \description: setting initial waypoints for the object
+
+*/
+
+/////////////////////////////////////////////////////////////////
+queue<Vector3>  pathFinding::getwayPoints(){
+
+
+	return wayPoints;
+
 
 }

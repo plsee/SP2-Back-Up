@@ -193,6 +193,13 @@ void SP2::Update(double dt)
 
 	}
 
+	if (Application::IsKeyPressed('G') && a != 0 && readyToUse >= 0.8f)
+	{
+		readyToUse = 0.f;
+		a--;
+
+	}
+
 	//Path finding test
 	spaceCraft.pathRoute(dt);
 
@@ -219,7 +226,7 @@ void SP2::Render()
 
 	
 	pathCheck();
-	renderTitleScreen();
+	//renderTitleScreen();
 
 }
 
@@ -406,23 +413,22 @@ void SP2::pathCheck(){
 	
 
 	modelStack.PushMatrix();
-	modelStack.Translate(spaceCraft.initialLocation.x, spaceCraft.initialLocation.y, spaceCraft.initialLocation.z);
+	modelStack.Translate(spaceCraft.getCurrentLocation().x, spaceCraft.getCurrentLocation().y, spaceCraft.getCurrentLocation().z);
 	RenderMesh(meshList[GEO_OBJECT], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 
+	if (!spaceCraft.getwayPoints().empty()){
 
-	modelStack.PushMatrix();
-	if (!spaceCraft.wayPoints.empty()){
-		modelStack.Translate(spaceCraft.wayPoints.front().x, spaceCraft.wayPoints.front().y, spaceCraft.wayPoints.front().z);
+		modelStack.PushMatrix();
+		modelStack.Translate(spaceCraft.getwayPoints().front().x, spaceCraft.getwayPoints().front().y, spaceCraft.getwayPoints().front().z);
+		RenderMesh(meshList[GEO_LIGHTBALL], false);
+		modelStack.PopMatrix();
+	
+		modelStack.PushMatrix();
+
 	}
-
-	RenderMesh(meshList[GEO_LIGHTBALL], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-
 
 
 }
