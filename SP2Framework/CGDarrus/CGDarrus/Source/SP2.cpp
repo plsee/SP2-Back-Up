@@ -129,18 +129,23 @@ void SP2::Init()
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//OCRA.tga");
 
-	meshList[GEO_OBJECT] = MeshBuilder::GenerateOBJ("Object", "OBJ//Flying.obj");
+	meshList[GEO_OBJECT] = MeshBuilder::GenerateOBJ("spaceShip", "OBJ//Flying.obj");
 	meshList[GEO_OBJECT]->textureID = LoadTGA("Image//flyingUV.tga");
+
+	meshList[GEO_CONTROL_PANEL] = MeshBuilder::GenerateOBJ("Control Panel", "OBJ//Control Panel.obj");
+	meshList[GEO_CONTROL_PANEL]->textureID = LoadTGA("Image//Control Panel.tga");
+
+	meshList[GEO_SPACE_STATION] = MeshBuilder::GenerateOBJ("Space Station", "OBJ//Space Station.obj");
+	meshList[GEO_SPACE_STATION]->textureID = LoadTGA("Image//Space Station.tga");
 
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("menu", Color(1, 1, 1), 1.f, 1.f);
 	meshList[GEO_QUAD]->textureID = LoadTGA("Image//SpaceFront.tga");
 
 
 	//Path Checks
-	spaceCraft.setInitialWayPoints(Vector3(10, 0, 10));
+	spaceCraft.setInitialWayPoints(Vector3(100, 50, 100));
 
-
-
+	
 
 }
 
@@ -193,12 +198,6 @@ void SP2::Update(double dt)
 
 	}
 
-	if (Application::IsKeyPressed('G') && a != 0 && readyToUse >= 0.8f)
-	{
-		readyToUse = 0.f;
-		a--;
-
-	}
 
 	//Path finding test
 	spaceCraft.pathRoute(dt);
@@ -410,11 +409,10 @@ void SP2::RenderSkybox()
 
 void SP2::pathCheck(){
 
-	
-
 	modelStack.PushMatrix();
 	modelStack.Translate(spaceCraft.getCurrentLocation().x, spaceCraft.getCurrentLocation().y, spaceCraft.getCurrentLocation().z);
-	RenderMesh(meshList[GEO_OBJECT], false);
+	modelStack.Scale(10, 10, 10);
+	RenderMesh(meshList[GEO_SPACE_STATION], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
