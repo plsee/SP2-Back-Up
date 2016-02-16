@@ -31,7 +31,8 @@
 
 /////////////////////////////////////////////////////////////////
 pathFinding::pathFinding() :
-initialLocation(Vector3(0, 0, 0))
+initialLocation(Vector3(0, 0, 0)),
+lastWayPointDirection(Vector3(0, 0, 0))
 {
 
 	wayPoints.push(Vector3(1, 1, 1));
@@ -44,11 +45,11 @@ initialLocation(Vector3(0, 0, 0))
 
 /*!
 
-* \method pathFinding:
+* \method: pathFinding
 
-* \author Wong Keng Han Ashley:
+* \author: Wong Keng Han Ashley
 
-* \date 15 feb 2016:
+* \date: 15 feb 2016
 
 * \description: overloaded constructor that takes in and sets initial location and final location
 
@@ -67,11 +68,11 @@ initialLocation(location)
 
 /*!
 
-* \method pathFinding:
+* \method: pathFinding
 
-* \author Wong Keng Han Ashley:
+* \author: Wong Keng Han Ashley
 
-* \date 15 feb 2016:
+* \date: 15 feb 2016
 
 * \description: default constructor
 
@@ -90,11 +91,11 @@ pathFinding::~pathFinding(){
 
 /*!
 
-* \method pathFinding:
+* \method: pathFinding
 
-* \author Wong Keng Han Ashley:
+* \author: Wong Keng Han Ashley
 
-* \date 15 feb 2016:
+* \date: 15 feb 2016
 
 * \description: moves the object towards the waypoint
 
@@ -108,13 +109,20 @@ void pathFinding::pathRoute(double dt){
 
 		Vector3 view = (wayPoints.front() - initialLocation).Normalized();
 		initialLocation += view * 10 * dt;
-
+		lastWayPointDirection = view;
 
 	}
-
 	if (!wayPoints.empty() && distanceBetween2points(initialLocation, wayPoints.front()) < 1){
+
 		wayPoints.pop();
 		std::cout << wayPoints.size() << std::endl;
+
+	}
+	if (wayPoints.empty()){
+
+		initialLocation += lastWayPointDirection * 10 * dt;
+
+
 	}
 
 	
@@ -124,11 +132,11 @@ void pathFinding::pathRoute(double dt){
 
 /*!
 
-* \method pathFinding:
+* \method: pathFinding
 
-* \author Wong Keng Han Ashley:
+* \author: Wong Keng Han Ashley
 
-* \date 15 feb 2016:
+* \date: 15 feb 2016
 
 * \description: checks the distance between 2 vectors
 
@@ -145,15 +153,16 @@ float pathFinding::distanceBetween2points(Vector3 Point1, Vector3 Point2){
 }
 
 
+
 /////////////////////////////////////////////////////////////////
 
 /*!
 
-* \method pathFinding:
+* \method: setInitialWayPoints
 
-* \author Wong Keng Han Ashley:
+* \author: Wong Keng Han Ashley
 
-* \date 15 feb 2016:
+* \date: 15 feb 2016
 
 * \description: setting initial waypoints for the object
 
@@ -176,6 +185,42 @@ void pathFinding::setInitialWayPoints(Vector3 endLocation){
 
 	}
 
+}
+
+
+
+/////////////////////////////////////////////////////////////////
+
+/*!
+
+* \method: updateWayPoints
+
+* \author: Wong Keng Han Ashley
+
+* \date: 15 feb 2016
+
+* \description: setting initial waypoints for the object
+
+*/
+
+/////////////////////////////////////////////////////////////////
+void pathFinding::updateWayPoints(Vector3 endLocation){
+
+	Vector3 view = (endLocation - initialLocation).Normalized();
+	Vector3 wayPointPosition = initialLocation;
+
+	float length = distanceBetween2points(endLocation, wayPointPosition);
+	length /= 10;
+
+	for (int i = 0; i < 10; i++){
+
+		wayPoints.push(wayPointPosition);
+		wayPointPosition += (view * length);
+
+
+
+	}
+
 
 
 }
@@ -184,23 +229,23 @@ void pathFinding::setInitialWayPoints(Vector3 endLocation){
 
 /*!
 
-* \method pathFinding:
+* \method: updateWayPoints
 
-* \author Wong Keng Han Ashley:
+* \author: Wong Keng Han Ashley
 
-* \date 15 feb 2016:
+* \date: 15 feb 2016
 
-* \description: Adds One new Way point
+* \description: setting initial waypoints for the object
 
 */
 
 /////////////////////////////////////////////////////////////////
+void pathFinding::resetWayPoints(){
 
-void pathFinding::updateWayPoints(Vector3 newLocation){
+	if (!wayPoints.empty()){
 
+		wayPoints.pop();
 
-	wayPoints.push(newLocation);
-
-
+	}
 
 }

@@ -76,6 +76,11 @@ public:
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderSkybox();
 	void pathCheck();
+	void renderTitleScreen();
+	void renderFightingUI();
+
+
+
 
 
 private:
@@ -99,11 +104,12 @@ private:
 	Mesh *meshList[NUM_GEOMETRY];
 
 	std::string FPSText;
+	std::string Ammo;
+	int a;
 	MS modelStack, viewStack, projectionStack;
 
 	pathFinding spaceCraft;
 
-	float wayPointSetCoolDown;
 
 };
 

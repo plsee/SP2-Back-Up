@@ -32,13 +32,16 @@ public:
 
 	void pathRoute(double dt);
 	void setInitialWayPoints(Vector3 endLocation);
-	void updateWayPoints(Vector3 newLocation);
+	void updateWayPoints(Vector3 endLocation);
 	float distanceBetween2points(Vector3 Point1, Vector3 Point2);
+	void resetWayPoints();
+
+
 
 
 	queue<Vector3> wayPoints;
 	Vector3 initialLocation;
-	
+	Vector3 lastWayPointDirection;
 
 
 };
