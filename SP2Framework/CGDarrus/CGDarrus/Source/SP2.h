@@ -7,6 +7,8 @@
 #include "Mesh.h"
 #include "MatrixStack.h"
 #include "Light.h"
+#include "Vehicles.h"
+#include "MousePicker.h"
 #include "Object.h"
 #include "pathFinding.h"
 #include <queue>
@@ -14,6 +16,7 @@
 
 using std::vector;
 using std::queue;
+
 
 class SP2 : public Scene
 {
@@ -32,6 +35,7 @@ class SP2 : public Scene
 		GEO_OBJECT,
 		GEO_CONTROL_PANEL,
 		GEO_SPACE_STATION,
+		GEO_HITBOX,
 		NUM_GEOMETRY,
 	};
 	enum UNIFORM_TYPE
@@ -81,12 +85,7 @@ public:
 	void renderTitleScreen();
 	void renderFightingUI();
 
-
-
-
-
 private:
-
 	unsigned m_vertexArrayID;
 	unsigned m_vertexBuffer[NUM_GEOMETRY];
 	unsigned m_colorBuffer[NUM_GEOMETRY];
@@ -98,21 +97,24 @@ private:
 	float readyToUse, rotateAngle, ExplosionYaw, ExplosionPitch, ExplosionSize;
 	Vector3 LightView;
 	std::vector<AABB> Interactions;
+	std::vector<AABB> worldHitbox;
 
 	Camera camera;
 	Controls control;
+	MousePicker picker;
 	Light light[1];
 
 	Mesh *meshList[NUM_GEOMETRY];
+
+	
 
 	std::string FPSText;
 	std::string Ammo;
 	int a;
 	MS modelStack, viewStack, projectionStack;
 
+
 	pathFinding spaceCraft;
-
-
 };
 
 
