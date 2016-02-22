@@ -32,11 +32,9 @@
 /////////////////////////////////////////////////////////////////
 pathFinding::pathFinding() :
 currentLocation(Vector3(0, 0, 0)),
-lastWayPointDirection(Vector3(0, 0, 0))
+lastWayPointDirection(Vector3(0, 0, 0)),
+speed(0)
 {
-
-	wayPoints.push(Vector3(1, 1, 1));
-
 
 }
 
@@ -57,7 +55,8 @@ lastWayPointDirection(Vector3(0, 0, 0))
 
 /////////////////////////////////////////////////////////////////
 pathFinding::pathFinding(Vector3 location, Vector3 endlocation) :
-currentLocation(location)
+currentLocation(location),
+speed(0)
 {
 	wayPoints.push(endlocation);
 
@@ -82,9 +81,11 @@ currentLocation(location)
 pathFinding::~pathFinding(){
 
 
+    while (!wayPoints.empty()){
 
+        wayPoints.pop();
 
-
+    }
 }
 
 /////////////////////////////////////////////////////////////////
@@ -104,11 +105,10 @@ pathFinding::~pathFinding(){
 /////////////////////////////////////////////////////////////////
 void pathFinding::pathRoute(double dt){
 
-
 	if (!wayPoints.empty()){
 
 		Vector3 view = (wayPoints.front() - currentLocation).Normalized();
-		currentLocation += view * 5 * dt;
+		currentLocation += view * 10 * dt;
 		lastWayPointDirection = view;
 		
 
@@ -122,11 +122,11 @@ void pathFinding::pathRoute(double dt){
 
 	if (wayPoints.empty()){
 
-		currentLocation += lastWayPointDirection * 5 * dt;
-
+        currentLocation += lastWayPointDirection * 10 * dt;
 
 	}
 
+    currentLocation.y = 0;
 	
 }
 
@@ -147,10 +147,7 @@ void pathFinding::pathRoute(double dt){
 /////////////////////////////////////////////////////////////////
 float pathFinding::distanceBetween2points(Vector3 Point1, Vector3 Point2){
 
-	
 	return sqrt(((Point1.x - Point2.x) * (Point1.x - Point2.x)) + ((Point1.y - Point2.y) *  (Point1.y - Point2.y)) + ((Point1.z - Point2.z)) *  (Point1.z - Point2.z));
-
-
 
 }
 
@@ -177,7 +174,8 @@ void pathFinding::setInitialWayPoints(Vector3 endLocation){
 	Vector3 wayPointPosition = currentLocation;
 
 	float length = distanceBetween2points(endLocation, wayPointPosition);
-	length /= 10;
+	
+    length /= 10;
 
 	for (int i = 0; i < 10; i++){
 
@@ -189,6 +187,28 @@ void pathFinding::setInitialWayPoints(Vector3 endLocation){
 
 }
 
+/////////////////////////////////////////////////////////////////
+
+/*!
+
+* \method: overLoaded setInitialWayPoints
+
+* \author: Wong Keng Han Ashley
+
+* \date: 18 feb 2016
+
+* \description: overloaded function for setting way points
+
+*/
+
+/////////////////////////////////////////////////////////////////
+
+void pathFinding::setInitialWayPoints(Vector3 location, Vector3 view){
+
+	currentLocation = location;
+	wayPoints.push(currentLocation + view);
+
+}
 
 
 /////////////////////////////////////////////////////////////////
@@ -213,17 +233,16 @@ void pathFinding::updateWayPoints(Vector3 endLocation){
 
 	resetWayPoints();
 
-	float length = distanceBetween2points(endLocation, wayPointPosition);
-	length /= 10;
 
-	for (int i = 0; i < 10; i++){
+	float length = distanceBetween2points(endLocation, wayPointPosition);
+	length /= 15;
+
+	for (int i = 0; i < 15; i++){
 
 		wayPointPosition += (view * length);
-		wayPoints.push(wayPointPosition);
+		wayPoints.push(Vector3(wayPointPosition.x, 0, wayPointPosition.z));
 		
-
 	}
-
 
 
 }
@@ -232,13 +251,13 @@ void pathFinding::updateWayPoints(Vector3 endLocation){
 
 /*!
 
-* \method: updateWayPoints
+* \method: resetWayPoints
 
 * \author: Wong Keng Han Ashley
 
 * \date: 16 feb 2016
 
-* \description: setting initial waypoints for the object
+* \description: remove all current waypoints
 
 */
 
@@ -247,6 +266,7 @@ void pathFinding::resetWayPoints(){
 
 	while (!wayPoints.empty()){
 
+        lastWayPointDirection = wayPoints.front();
 		wayPoints.pop();
 
 	}
@@ -263,18 +283,38 @@ void pathFinding::resetWayPoints(){
 
 * \date: 16 feb 2016
 
-* \description: setting initial waypoints for the object
+* \description: return current location
 
 */
 
 /////////////////////////////////////////////////////////////////
 Vector3 pathFinding::getCurrentLocation(){
 
-
 	return currentLocation;
 
+}
+
+/////////////////////////////////////////////////////////////////
+
+/*!
+
+* \method: setCurrentLocation
+
+* \author: Wong Keng Han Ashley
+
+* \date: 19 feb 2016
+
+* \description: return current location
+
+*/
+
+/////////////////////////////////////////////////////////////////
+void pathFinding::setCurrentLocation(Vector3 newCurrLocation){
+
+    currentLocation = newCurrLocation;
 
 }
+
 
 
 /////////////////////////////////////////////////////////////////
@@ -285,9 +325,9 @@ Vector3 pathFinding::getCurrentLocation(){
 
 * \author: Wong Keng Han Ashley
 
-* \date: 16 feb 2016
+* \date: 17 feb 2016
 
-* \description: setting initial waypoints for the object
+* \description: returns the vector of way points
 
 */
 
@@ -305,23 +345,70 @@ queue<Vector3>  pathFinding::getwayPoints(){
 
 /*!
 
-* \method: getwayPoints
+* \method: getLastWayPointDirection
 
 * \author: Wong Keng Han Ashley
 
-* \date: 16 feb 2016
+* \date: 17 feb 2016
 
-* \description: setting initial waypoints for the object
+* \description: return the direction of the previous waypoint
 
 */
 
 /////////////////////////////////////////////////////////////////
 Vector3 pathFinding::getLastWayPointDirection(){
 
-
-
 	return lastWayPointDirection;
 
+}
+
+////////////////////////////////////////////////////////////////
+
+/*!
+
+* \method: setSpeed
+
+* \author: Wong Keng Han Ashley
+
+* \date: 18 feb 2016
+
+* \description: set the speed of the vehicle
+*/
+
+/////////////////////////////////////////////////////////////////
+void pathFinding::setSpeed(float newSpeed){
+
+
+    speed = newSpeed;
 
 
 }
+
+////////////////////////////////////////////////////////////////
+
+/*!
+
+* \method: getSpeed
+
+* \author: Wong Keng Han Ashley
+
+* \date: 19 feb 2016
+
+* \description: return speed
+
+*/
+
+/////////////////////////////////////////////////////////////////
+float pathFinding::getSpeed(){
+
+
+    return speed;
+
+
+}
+
+
+
+
+
+

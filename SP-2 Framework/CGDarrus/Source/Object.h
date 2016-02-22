@@ -6,16 +6,19 @@
 class Object
 {
 public:
+
 	Object();
 	Object(Vector3 pos, Vector3 view, Vector3 up);
 	~Object();
 	AABB interaction;
 	AABB hitbox;
-	Vector3 Pos, View, Up, Right;
+	Vector3 Pos, View, Up, Right, InteractionMin, InteractionMax;
+	float HitboxSize;
 
 	void SetHitbox(AABB hitbox);
-	void SetHitbox(float size);
+	void SetHitboxSize(float size);
 	void SetInteraction(AABB interaction);
+	void SetInteractionSize(float minX, float minY, float minZ, float maxX, float maxY, float maxZ);
 	void SetPos(Vector3 position);
 	void SetPos(float x, float y, float z);
 	void SetView(Vector3 view);
@@ -26,6 +29,7 @@ public:
 	void SetRight(Vector3 right);
 	void SetRight(Vector3 view, Vector3 up);
 	void SetRight(float x, float y, float z);
+
 };
 
 #endif

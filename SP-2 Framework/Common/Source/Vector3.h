@@ -77,6 +77,12 @@ struct Vector3
 	friend std::ostream& operator<<( std::ostream& os, Vector3& rhs); //print to ostream
 
 	friend Vector3 operator*( float scalar, const Vector3& rhs ); //what is this for?
+
+    //Returns magnitude of the vector
+    float getMagnitude();
+
+    //returns the distance from this vector to another vector
+    float distanceBetween2points(Vector3 Point1);
 };
 
 #endif //VECTOR3_H
